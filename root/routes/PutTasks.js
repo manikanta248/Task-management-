@@ -23,14 +23,14 @@ router.post("/puttask", async (req, res) => {
     try {
       // Extract task data from request body
       console.log("Request Body:", req.body);
-      const { task, enddate, priority } = req.body;
+      const { task, enddate, priority,token } = req.body;
       console.log(req.body)
       // Extract token from request headers
-      const token = req.headers.authorization?.split(" ")[1]; // Using optional chaining to avoid errors if authorization header is not present
-      console.log("Token:", token);
+      const id = req.headers.authorization?.split(" ")[1]; // Using optional chaining to avoid errors if authorization header is not present
+      
   
       // Validate token (you should implement your token validation logic here)
-      if (!token) {
+      if (!id) {
         console.log("Unauthorized: Token missing");
         return res.status(401).json({ success: false, error: "Unauthorized" });
       }
@@ -40,7 +40,8 @@ router.post("/puttask", async (req, res) => {
         task:task,
         endDate: enddate,
         priority: priority,
-        token: token
+        id: token,
+        token:id
       });
   
       // Save the new task to the database
