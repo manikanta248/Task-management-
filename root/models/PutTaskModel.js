@@ -13,6 +13,7 @@ const TaskSchema = new Schema({
   priority: { type: String, enum: ['high', 'medium', 'low'], required: true },
   status: { type: String, default: 'To Do' },
   token: { type: String, required: true },
+  id: { type: String, required: true },
   subtasks: [{ type: Schema.Types.ObjectId, ref: 'Subtask' }],
   createdDate: { type: Date, default: Date.now } // Set default value to current date
 });
