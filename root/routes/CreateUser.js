@@ -29,18 +29,18 @@ router.post("/createuser", [
         const hashedPassword = await bcrypt.hash(password, salt);
 
         // Create new user
-        await User.create({
+        const newUser = await User.create({
             email,
             password: hashedPassword
         });
 
-        res.json({ success: true });
+        // Send userId in the response
+        res.json({ success: true, userId: newUser._id });
     } catch (err) {
         console.error(err);
         res.status(500).json({ success: false, errors: "Internal server error" });
     }
 });
-
 router.post("/loginuser", [
     body('email').isEmail(),
     body('password').isLength({ min: 5 })
@@ -70,7 +70,7 @@ router.post("/loginuser", [
 
         const authToken = jwt.sign(data, jwtSecret);
 
-        res.json({ success: true, authToken, email: userData.email });
+        res.json({ success: true, authToken, email: userData.email,userId:userData._id });
 
     } catch (err) {
         console.error(err);
