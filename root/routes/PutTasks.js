@@ -21,39 +21,37 @@ router.delete("/deletetask/:id", async (req, res) => {
 });
 router.post("/puttask", async (req, res) => {
     try {
-      // Extract task data from request body
-      console.log("Request Body:", req.body);
-      const { task, enddate, priority,token } = req.body;
-      console.log(req.body)
-      // Extract token from request headers
-      const id = req.headers.authorization?.split(" ")[1]; // Using optional chaining to avoid errors if authorization header is not present
-      
-  
-      // Validate token (you should implement your token validation logic here)
-      if (!id) {
-        console.log("Unauthorized: Token missing");
-        return res.status(401).json({ success: false, error: "Unauthorized" });
-      }
-  
-      // Create a new task instance
-      const newTask = new Task({
-        task:task,
-        endDate: enddate,
-        priority: priority,
-        id: token,
-        token:id
-      });
-  
-      // Save the new task to the database
-      await newTask.save();
-      console.log("Task saved:", newTask);
-  
-      res.status(201).json({ success: true, message: "Task successfully saved", task: newTask });
+        // Extract task data from request body
+        console.log("Request Body:", req.body);
+        const { task, enddate, priority, token } = req.body;
+        console.log(req.body);
+        // Extract token from request headers
+        const id = req.headers.authorization?.split(" ")[1]; // Using optional chaining to avoid errors if authorization header is not present
+
+        // Validate token (you should implement your token validation logic here)
+        if (!id) {
+            console.log("Unauthorized: Token missing");
+            return res.status(401).json({ success: false, error: "Unauthorized" });
+        }
+
+        // Create a new task instance
+        const newTask = await Task.create({
+            task: task,
+            endDate: enddate,
+            priority: priority,
+            id: token,
+            token: id
+        });
+
+        console.log("Task saved:", newTask);
+
+        res.status(201).json({ success: true, message: "Task successfully saved", task: newTask });
     } catch (error) {
-      console.error("Error:", error);
-      res.status(500).json({ success: false, error: "Internal server error" });
+        console.error("Error:", error);
+        res.status(500).json({ success: false, error: "Internal server error" });
     }
-  });
+});
+
   
 
 
